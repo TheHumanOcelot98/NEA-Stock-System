@@ -22,6 +22,24 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ComputerScienceNEA.py" />
+    <Compile Include="Database.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Graph.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Items.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Providers.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Stock.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Transactions.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

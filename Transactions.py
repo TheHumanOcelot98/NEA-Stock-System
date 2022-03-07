@@ -1,18 +1,16 @@
-
 import matplotlib as mpl
 import pyodbc as pdb
 from prettytable import from_db_cursor
 import os
 import sys
+import Database
 
-import DatabaseHandler
-
-
+SELECTALLTX = ('SELECT * FROM Transactions')
 
 class TransactionsManager(object): #Manages actions inside the Transactions table
 
     def __init__(self):
-        self.dbh = DatabaseHandler()
+        self.dbh = Database.DatabaseHandler()
     
     def txAccess(self):
         self.cursor.execute('SELECT transactionID, itemName, transactionType, Quantity FROM Transactions, Items, TransactionTypes WHERE Items.itemID = Transactions.itemID AND Transactions.transactionTypeID = TransactionTypes.transactionTypeID')

@@ -4,128 +4,7 @@ from prettytable import from_db_cursor
 import os
 import sys
 
-SELECTALLTX = ('SELECT * FROM Transactions')
-
 import Database, Stock, Providers, Items, Transactions, Graph
-
-class GraphDatabaseManager(object):
-
-    def __init__(self):
-        self.txm = TransactionsManager()
-        self.dbh = DatabaseHandler()
-
-    def txGetGraphData(self):
-        connect = self.dbh.connectToDb()
-        cursor = connect.cursor()
-        cursor.execute(SELECTALLTX)
-        cursor.fetchall()
-        printTx = self.dbh.connectToDb(SELECTALLTX)
-        print(printTx)
-
-class TransactionsManager(object): #Manages actions inside the Transactions table
-
-    def __init__(self):
-        self.dbh = DatabaseHandler()
-    
-    def txAccess(self):
-        self.cursor.execute('SELECT transactionID, itemName, transactionType, Quantity FROM Transactions, Items, TransactionTypes WHERE Items.itemID = Transactions.itemID AND Transactions.transactionTypeID = TransactionTypes.transactionTypeID')
-        return self.cursor
-
-    def getTxDate(self):
-        self.cursor.execute('SELECT transactionDate FROM Transactions')
-        newDate = self.cursor.fetchall()
-        return self.dbh.transformDate(newDate)
-
-    def txInsert(self, txToInsert, txDate, txType, quantity):
-        self.cursor.execute('INSERT INTO Transactions (itemID, transactionDate, transactionTypeID, Quantity) VALUES (\'{}\', \'{}\', \'{}\', {})'.format(txToInsert, txDate, txType, quantity))
-        return self.cursor
-
-    def txVoid(self, txToVoid):
-        self.cursor.execute('UPDATE Transactions SET Voided = 1 WHERE transactionID = {}'.format(txToVoid))
-        return self.cursor
-
-    def txGetGraphData(self):
-        printTx = self.dbh.connectToDb(SELECTALLTX)
-        print(printTx)
-
-    def showTxTable(self):
-        print("")
-        tableOutput = from_db_cursor(self.txAccess())
-        tableOutput.add_column("Transaction Date", self.getTxDate())
-        tableOutput.field_names = ["Transaction ID", "Stock Name", "Transaction Type", "Quantity Bought/Sold", "Transaction Date"]
-        print(tableOutput.get_string(fields=["Transaction ID", "Stock Name", "Transaction Date", "Transaction Type", "Quantity Bought/Sold"]))
-        print("")
-
-class ItemsManager(object): #Manages actions inside the Items table
-
-    def __init__(self):
-        pass
-
-    def itemsAccess(self):
-        self.cursor.execute('SELECT itemName, stockType, stockProvider FROM Items, Types, Providers WHERE Providers.providerID = Items.providerID AND Types.typeID = Items.typeID')
-        return self.cursor
-
-    def getBuyPrices(self):
-        self.cursor.execute('SELECT itemBuyCost FROM Items')
-        fullPrice = self.cursor.fetchall()
-        return self.makePrice(fullPrice)
-
-    def getSellPrices(self):
-        self.cursor.execute('SELECT itemSellCost FROM Items')
-        fullPrice = self.cursor.fetchall()
-        return self.makePrice(fullPrice)
-
-    def showItemsTable(self):
-        print("")
-        tableOutput = from_db_cursor(self.itemsAccess())
-        tableOutput.field_names = ["Stock Name", "Item Type", "Provider"]
-        tableOutput.add_column("Item Cost (Buy)", self.getBuyPrices())
-        tableOutput.add_column("Item Cost (Sell)", self.getSellPrices())
-        print(tableOutput)
-        print("")
-
-    def itemsVoid(self, itemToVoid):
-        self.cursor.execute('UPDATE Items SET Voided = 1 WHERE itemName = {}'.format(itemToVoid))
-        return self.cursor
-
-    def itemsInsert(self, newItemName, newItemType, newItemProvider, newItemBuyCost, newItemSellCost):
-        self.cursor.execute('INSERT INTO Items (itemName, typeID, providerID, itemBuyCost, itemSellCost) VALUES (\'{}\', \'{}\', {}, {}, {})'.format(newItemName, newItemType, newItemProvider, newItemBuyCost, newItemSellCost))
-        return self.cursor
-
-class StockManager(object): #Manages actions for the Stock table
-
-    def __init__(self):
-        pass
-
-    def stockAccess(self):
-        self.cursor.execute('SELECT itemID, itemName, stockAmount FROM Items')
-        return self.cursor
-
-    def showStockTable(self):
-        print("")
-        tableOutput = from_db_cursor(self.stockAccess())
-        tableOutput.field_names = ["Stock ID", "Item Name", "Stock Quantity"]
-        print(tableOutput.get_string(fields=["Item Name", "Stock Quantity"]))
-        print("")
-
-    def graphStock(self):
-        print("Graph")
-
-class ProvidersManager(object):
-
-    def __init__(self):
-        pass
-
-    def providersAccess(self):
-        self.cursor.execute('SELECT * FROM Providers')
-        return self.cursor
-
-    def showProviderTable(self):
-        print("")
-        tableOutput = from_db_cursor(self.providersAccess())
-        tableOutput.field_names = ["Provider ID", "Provider Name"]
-        print(tableOutput.get_string(fields=["Provider ID", "Provider Name"]))
-        print("")
 
 class TransactionMenu(object): #Creates the menu for transactions
 
@@ -222,36 +101,8 @@ class ItemsMenu(object): #Creates a menu for the Items table
                 print("")
                 self.itemsMainMenu()
 
-class DatabaseHandler(object):
-
-    def __init__(self):
-        pass
-
-    def connectToDb(self, sql):
-        cwd = os.getcwd()
-        databasePath = (cwd + "\\stockDatabase.accdb")
-        return pdb.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=' + databasePath + ';')
-
-    def makePrice(self, price):
-        k = []
-        for row in price:
-            k.append("GBP " + str(round(row[0], 2)))
-        return k
-
-    def transformDate(self, newDate):
-        k = []
-        for row in newDate:
-            k.append(row[0].strftime("%d/%m/%Y"))
-        return k
 
 class mainMenu(object):
-
-    def __init__(self):
-        self.dbh = DatabaseHandler()
-        self.txm = TransactionsManager()
-        self.itm = ItemsManager()
-        self.stm = StockManager()
-        self.pvm = ProvidersManager()
 
     def accessTable(self):
         resultCheck = 0
@@ -259,9 +110,9 @@ class mainMenu(object):
 
         match tableRetrieve:
             case "Providers":
-                main.buyAccess()
+                Providers.ProvidersManager().showProviderTable
             case "Transactions":
-                tm = TransactionsManager()
+                tm = Transactions.TransactionsManager()
                 print(tm.showTxTable)
             case "Stock":
                 main.stockAccess()

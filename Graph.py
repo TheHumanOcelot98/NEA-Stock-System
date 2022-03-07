@@ -1,5 +1,5 @@
-import TransactionsManage
-import DatabaseHandle
+import Transactions
+import Database
 
 class GraphDatabaseManager(object):
 
