@@ -1,6 +1,8 @@
 import Transactions
 import Database
 
+SELECTALLTX = ('SELECT * FROM Transactions')
+
 class GraphDatabaseManager(object):
 
     def __init__(self):

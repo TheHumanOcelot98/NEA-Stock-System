@@ -11,6 +11,7 @@ class TransactionsManager(object): #Manages actions inside the Transactions tabl
 
     def __init__(self):
         self.dbh = Database.DatabaseHandler()
+        self.cursor = Database.DatabaseHandler.connectToDb().cursor()
     
     def txAccess(self):
         self.cursor.execute('SELECT transactionID, itemName, transactionType, Quantity FROM Transactions, Items, TransactionTypes WHERE Items.itemID = Transactions.itemID AND Transactions.transactionTypeID = TransactionTypes.transactionTypeID')

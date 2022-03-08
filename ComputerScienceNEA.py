@@ -1,4 +1,4 @@
-import matplotlib as mpl
+import matplotlib.pyplot as mpl
 import pyodbc as pdb
 from prettytable import from_db_cursor
 import os
@@ -104,6 +104,9 @@ class ItemsMenu(object): #Creates a menu for the Items table
 
 class mainMenu(object):
 
+    def __init__(self):
+        pass
+
     def accessTable(self):
         resultCheck = 0
         tableRetrieve = input("Would you like to retrieve a table (Transactions, Providers, Stock, or Items), or Quit? ")
@@ -113,13 +116,21 @@ class mainMenu(object):
                 Providers.ProvidersManager().showProviderTable
             case "Transactions":
                 tm = Transactions.TransactionsManager()
-                print(tm.showTxTable)
+                print(tm.showTxTable())
+                main.txMainMenu()
             case "Stock":
                 main.stockAccess()
             case "Items":
                 main.itemsAccess()
             case "Test":
-                self.txm.txGetGraphData()
+                Year = [1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010]
+                UnemployRate = [9.8, 12, 8, 7.2, 6.9, 7, 6.5, 6.2, 5.5, 6.3]
+                mpl.plot(Year, UnemployRate, color='red', marker='o')
+                mpl.title('Unemployment Rate Vs Year', fontsize=14)
+                mpl.xlabel('Year', fontsize=14)
+                mpl.ylabel('Unemployment Rate', fontsize=14)
+                mpl.grid(True)
+                mpl.show()
             case "Quit":
                 sys.exit("Quitting...")
             case _:

@@ -9,7 +9,7 @@ class DatabaseHandler(object):
     def __init__(self):
         pass
 
-    def connectToDb(self, sql):
+    def connectToDb(self):
         cwd = os.getcwd()
         databasePath = (cwd + "\\stockDatabase.accdb")
         return pdb.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=' + databasePath + ';')
