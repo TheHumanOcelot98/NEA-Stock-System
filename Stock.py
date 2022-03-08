@@ -7,7 +7,7 @@ import sys
 class StockManager(object): #Manages actions for the Stock table
 
     def __init__(self):
-        pass
+        self.cursor = Database.DatabaseHandler().connectToDb().cursor()
 
     def stockAccess(self):
         self.cursor.execute('SELECT itemID, itemName, stockAmount FROM Items')

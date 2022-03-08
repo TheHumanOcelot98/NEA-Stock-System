@@ -7,7 +7,7 @@ import sys
 class ItemsManager(object): #Manages actions inside the Items table
 
     def __init__(self):
-        pass
+        self.cursor = Database.DatabaseHandler().connectToDb().cursor()
 
     def itemsAccess(self):
         self.cursor.execute('SELECT itemName, stockType, stockProvider FROM Items, Types, Providers WHERE Providers.providerID = Items.providerID AND Types.typeID = Items.typeID')

@@ -8,6 +8,7 @@ class GraphDatabaseManager(object):
     def __init__(self):
         self.txm = TransactionsManager()
         self.dbh = DatabaseHandler()
+        self.cursor = Database.DatabaseHandler().connectToDb().cursor()
 
     def txGetGraphData(self):
         connect = self.dbh.connectToDb()

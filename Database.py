@@ -7,7 +7,7 @@ import sys
 class DatabaseHandler(object):
 
     def __init__(self):
-        pass
+        self.cursor = Database.DatabaseHandler().connectToDb().cursor()
 
     def connectToDb(self):
         cwd = os.getcwd()

@@ -7,7 +7,7 @@ import sys
 class ProvidersManager(object):
 
     def __init__(self):
-        pass
+        self.cursor = Database.DatabaseHandler().connectToDb().cursor()
 
     def providersAccess(self):
         self.cursor.execute('SELECT * FROM Providers')

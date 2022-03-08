@@ -9,7 +9,7 @@ import Database, Stock, Providers, Items, Transactions, Graph
 class TransactionMenu(object): #Creates the menu for transactions
 
     def __init__(self):
-        pass
+        self.cursor = Database.DatabaseHandler().connectToDb().cursor()
 
     def txMainMenu(self):
         txInput = input("What would you like to do with the table? (Edit, Add, Remove, Graph, Back) ")
@@ -102,7 +102,7 @@ class ItemsMenu(object): #Creates a menu for the Items table
                 self.itemsMainMenu()
 
 
-class mainMenu(object):
+class MainMenu(object):
 
     def __init__(self):
         pass
@@ -117,11 +117,13 @@ class mainMenu(object):
             case "Transactions":
                 tm = Transactions.TransactionsManager()
                 print(tm.showTxTable())
-                main.txMainMenu()
+                tmm = TransactionMenu()
+                tmm.txMainMenu()
             case "Stock":
                 main.stockAccess()
             case "Items":
-                main.itemsAccess()
+                itm = Items.ItemsManager()
+                print(itm.showItemsTable())
             case "Test":
                 Year = [1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010]
                 UnemployRate = [9.8, 12, 8, 7.2, 6.9, 7, 6.5, 6.2, 5.5, 6.3]
@@ -141,7 +143,7 @@ class mainMenu(object):
         if resultCheck == 0:
             self.accessTable()
             
-main = mainMenu()
+main = MainMenu()
 main.accessTable()
 
 """
